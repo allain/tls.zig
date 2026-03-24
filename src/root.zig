@@ -128,7 +128,7 @@ test "nonblock handshake and connection" {
         });
 
         // client flight1; client hello is in buf1
-        var cr = try cli.run(&sc_buf, &cs_buf);
+        const cr = try cli.run(&sc_buf, &cs_buf);
         try testing.expectEqual(0, cr.recv_pos);
         try testing.expect(cr.send.len > 0);
         try testing.expect(!cli.done());
@@ -226,7 +226,7 @@ test "ALPN negotiation: h2 selected" {
     });
 
     // client flight 1
-    var cr = try cli.run(&sc_buf, &cs_buf);
+    const cr = try cli.run(&sc_buf, &cs_buf);
     // server flight 1
     var sr = try srv.run(cs_buf[0..cr.send_pos], &sc_buf);
     // client flight 2
@@ -265,7 +265,7 @@ test "ALPN negotiation: server picks preferred protocol" {
         .alpn_protocols = &.{"http/1.1"},
     });
 
-    var cr = try cli.run(&sc_buf, &cs_buf);
+    const cr = try cli.run(&sc_buf, &cs_buf);
     var sr = try srv.run(cs_buf[0..cr.send_pos], &sc_buf);
     cr = try cli.run(sc_buf[0..sr.send_pos], &cs_buf);
     try testing.expect(cli.done());
@@ -298,7 +298,7 @@ test "ALPN negotiation: no ALPN when not configured" {
         .now = .zero,
     });
 
-    var cr = try cli.run(&sc_buf, &cs_buf);
+    const cr = try cli.run(&sc_buf, &cs_buf);
     var sr = try srv.run(cs_buf[0..cr.send_pos], &sc_buf);
     cr = try cli.run(sc_buf[0..sr.send_pos], &cs_buf);
     try testing.expect(cli.done());
@@ -334,7 +334,7 @@ test "ALPN negotiation: no common protocol is error" {
         .alpn_protocols = &.{"http/1.1"},
     });
 
-    var cr = try cli.run(&sc_buf, &cs_buf);
+    const cr = try cli.run(&sc_buf, &cs_buf);
     // Server should reject with no_application_protocol
     try testing.expectError(error.TlsNoApplicationProtocol, srv.run(cs_buf[0..cr.send_pos], &sc_buf));
 }
