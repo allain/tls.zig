@@ -1018,7 +1018,7 @@ test "verify google.com certificate" {
     };
 
     const io = testing.io;
-    var ca_bundle: Certificate.Bundle = .{};
+    var ca_bundle: Certificate.Bundle = .empty;
     try ca_bundle.rescan(testing.allocator, io, std.Io.Clock.real.now(io));
     defer ca_bundle.deinit(testing.allocator);
 
